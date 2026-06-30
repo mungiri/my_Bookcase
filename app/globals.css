@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f3ec; /* 따뜻한 종이색 */
+  --surface: #fffdf8; /* 카드 표면 */
+  --foreground: #2b2620; /* 잉크색 */
+  --muted: #8a8276; /* 흐린 글씨 */
+  --line: #e7dfd1; /* 구분선 */
+  --accent: #9a5b3f; /* 테라코타 */
+  --accent-soft: #f0e3da;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --font-sans: var(--font-noto-sans-kr);
+  --font-serif: var(--font-noto-serif-kr);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-noto-sans-kr), system-ui, sans-serif;
+}
+
+/* 가벼운 스크롤바 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+/* 텍스트 줄임 (밑줄/설명 미리보기용) */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
