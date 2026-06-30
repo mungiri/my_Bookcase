@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Noto_Sans_KR, Noto_Serif_KR } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import AppGate from "@/components/AppGate";
+import UserMenu from "@/components/UserMenu";
 
 const notoSans = Noto_Sans_KR({
   variable: "--font-noto-sans-kr",
@@ -43,24 +45,27 @@ export default function RootLayout({
                 책갈피
               </span>
             </Link>
-            <nav className="flex items-center gap-5 text-sm">
-              <Link
-                href="/"
-                className="text-muted hover:text-accent transition-colors"
-              >
-                내 책장
-              </Link>
-              <Link
-                href="/calendar"
-                className="text-muted hover:text-accent transition-colors"
-              >
-                달력
-              </Link>
-            </nav>
+            <div className="flex items-center gap-5">
+              <nav className="flex items-center gap-5 text-sm">
+                <Link
+                  href="/"
+                  className="text-muted hover:text-accent transition-colors"
+                >
+                  내 책장
+                </Link>
+                <Link
+                  href="/calendar"
+                  className="text-muted hover:text-accent transition-colors"
+                >
+                  달력
+                </Link>
+              </nav>
+              <UserMenu />
+            </div>
           </div>
         </header>
-        <main className="flex-1 mx-auto w-full max-w-5xl px-5 py-8">
-          {children}
+        <main className="flex-1 mx-auto w-full max-w-5xl px-5 py-8 flex flex-col">
+          <AppGate>{children}</AppGate>
         </main>
         <footer className="border-t border-line py-6 text-center text-xs text-muted">
           책갈피 — 데이터는 이 브라우저에만 저장됩니다

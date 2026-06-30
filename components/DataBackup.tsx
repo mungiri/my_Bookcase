@@ -34,7 +34,7 @@ export default function DataBackup() {
     }
     try {
       const text = await file.text();
-      importData(text);
+      await importData(text);
       setMsg("복원이 완료됐어요.");
     } catch {
       setMsg("파일을 읽을 수 없어요. 올바른 백업 파일인지 확인해주세요.");
