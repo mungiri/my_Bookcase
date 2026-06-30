@@ -84,7 +84,7 @@ export default function HomePage() {
           hasAny={data.books.length > 0}
         />
       ) : (
-        <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-5 gap-y-7">
+        <ul className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-4 gap-y-6">
           {books.map((b) => (
             <li key={b.id}>
               <Link href={`/book/${b.id}`} className="group block">

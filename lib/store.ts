@@ -141,6 +141,16 @@ export function addDiary(
   return d;
 }
 
+export function updateDiary(
+  id: string,
+  patch: Partial<Omit<DiaryEntry, "id" | "bookId" | "createdAt">>
+) {
+  write((prev) => ({
+    ...prev,
+    diary: prev.diary.map((d) => (d.id === id ? { ...d, ...patch } : d)),
+  }));
+}
+
 export function removeDiary(id: string) {
   write((prev) => ({
     ...prev,
@@ -156,6 +166,18 @@ export function addHighlight(
   const h: Highlight = { ...hl, id: uid(), createdAt: Date.now() };
   write((prev) => ({ ...prev, highlights: [h, ...prev.highlights] }));
   return h;
+}
+
+export function updateHighlight(
+  id: string,
+  patch: Partial<Omit<Highlight, "id" | "bookId" | "createdAt">>
+) {
+  write((prev) => ({
+    ...prev,
+    highlights: prev.highlights.map((h) =>
+      h.id === id ? { ...h, ...patch } : h
+    ),
+  }));
 }
 
 export function removeHighlight(id: string) {

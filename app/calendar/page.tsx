@@ -17,6 +17,7 @@ export default function CalendarPage() {
     year: today.getFullYear(),
     month: today.getMonth(), // 0-based
   });
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const now = Date.now();
   const todayStr = ymd(today.getFullYear(), today.getMonth(), today.getDate());
@@ -85,6 +86,16 @@ export default function CalendarPage() {
     return { cells, active };
   }, [cursor, data.books, data.diary, now, colorOf, todayStr]);
 
+  const selectedDiary = selectedDate
+    ? data.diary
+        .filter((d) => d.date === selectedDate)
+        .sort((a, b) => a.createdAt - b.createdAt)
+        .map((d) => ({
+          entry: d,
+          book: data.books.find((b) => b.id === d.bookId),
+        }))
+    : [];
+
   function move(delta: number) {
     setCursor((c) => {
       const m = c.month + delta;
@@ -151,8 +162,15 @@ export default function CalendarPage() {
           {view.cells.map((cell, i) => (
             <div
               key={i}
-              className={`min-h-[88px] border-b border-r border-line p-1.5 last:border-r-0 ${
-                cell.day == null ? "bg-background/40" : ""
+              onClick={() =>
+                cell.dateStr && setSelectedDate(cell.dateStr)
+              }
+              className={`min-h-[88px] border-b border-r border-line p-1.5 last:border-r-0 transition-colors ${
+                cell.day == null ? "bg-background/40" : "cursor-pointer hover:bg-accent-soft/40"
+              } ${
+                cell.dateStr && cell.dateStr === selectedDate
+                  ? "ring-2 ring-accent ring-inset bg-accent-soft/30"
+                  : ""
               }`}
             >
               {cell.day != null && (
@@ -174,7 +192,10 @@ export default function CalendarPage() {
                     {cell.books?.slice(0, 3).map((b) => (
                       <button
                         key={b.id}
-                        onClick={() => router.push(`/book/${b.id}`)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/book/${b.id}`);
+                        }}
                         title={b.title}
                         className="w-full flex items-center gap-1 text-left group"
                       >
@@ -204,6 +225,59 @@ export default function CalendarPage() {
           ))}
         </div>
       </div>
+
+      {/* 선택한 날짜의 일기 미리보기 */}
+      {selectedDate && (
+        <div className="mt-4 rounded-2xl border border-line bg-surface p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-medium">
+              {(() => {
+                const [, m, d] = selectedDate.split("-");
+                return `${Number(m)}월 ${Number(d)}일 일기`;
+              })()}
+            </h2>
+            <button
+              onClick={() => setSelectedDate(null)}
+              className="text-xs text-muted hover:text-accent"
+            >
+              닫기 ✕
+            </button>
+          </div>
+          {selectedDiary.length === 0 ? (
+            <p className="text-sm text-muted py-4 text-center">
+              이 날 작성한 일기가 없어요.
+            </p>
+          ) : (
+            <ul className="space-y-3">
+              {selectedDiary.map(({ entry, book }) => (
+                <li
+                  key={entry.id}
+                  className="rounded-xl border border-line bg-background p-3"
+                >
+                  <Link
+                    href={`/book/${entry.bookId}`}
+                    className="flex items-center gap-2 text-sm font-medium hover:text-accent transition-colors"
+                  >
+                    <span
+                      className="w-2.5 h-2.5 rounded-full shrink-0"
+                      style={{ backgroundColor: colorOf.get(entry.bookId) }}
+                    />
+                    {book?.title ?? "(삭제된 책)"}
+                    {(entry.pageFrom || entry.pageTo) && (
+                      <span className="text-xs text-muted font-normal">
+                        {entry.pageFrom ?? "?"}–{entry.pageTo ?? "?"}쪽
+                      </span>
+                    )}
+                  </Link>
+                  <p className="text-sm mt-1.5 whitespace-pre-wrap leading-relaxed text-foreground/90">
+                    {entry.content}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       {/* 이 달의 책 (범례 + 이동) */}
       <div className="mt-6">
