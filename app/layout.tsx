@@ -43,12 +43,20 @@ export default function RootLayout({
                 책갈피
               </span>
             </Link>
-            <Link
-              href="/"
-              className="text-sm text-muted hover:text-accent transition-colors"
-            >
-              내 책장
-            </Link>
+            <nav className="flex items-center gap-5 text-sm">
+              <Link
+                href="/"
+                className="text-muted hover:text-accent transition-colors"
+              >
+                내 책장
+              </Link>
+              <Link
+                href="/calendar"
+                className="text-muted hover:text-accent transition-colors"
+              >
+                달력
+              </Link>
+            </nav>
           </div>
         </header>
         <main className="flex-1 mx-auto w-full max-w-5xl px-5 py-8">
