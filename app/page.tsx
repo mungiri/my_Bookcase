@@ -8,6 +8,8 @@ import type { Status } from "@/lib/types";
 import BookCover from "@/components/BookCover";
 import Stars from "@/components/Stars";
 import AddBookModal from "@/components/AddBookModal";
+import StatsPanel from "@/components/StatsPanel";
+import DataBackup from "@/components/DataBackup";
 
 type Filter = "all" | Status;
 
@@ -56,6 +58,8 @@ export default function HomePage() {
           + 책 추가
         </button>
       </div>
+
+      <StatsPanel books={data.books} />
 
       <div className="flex flex-wrap gap-2 mb-6">
         {filters.map((f) => (
@@ -108,6 +112,8 @@ export default function HomePage() {
           ))}
         </ul>
       )}
+
+      <DataBackup />
 
       {showAdd && <AddBookModal onClose={() => setShowAdd(false)} />}
     </div>
