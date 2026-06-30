@@ -68,7 +68,7 @@ export default function RootLayout({
           <AppGate>{children}</AppGate>
         </main>
         <footer className="border-t border-line py-6 text-center text-xs text-muted">
-          책갈피 — 데이터는 이 브라우저에만 저장됩니다
+          책갈피 — 기록은 안전하게 클라우드에 저장됩니다
         </footer>
       </body>
     </html>
