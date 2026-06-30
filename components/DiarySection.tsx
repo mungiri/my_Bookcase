@@ -204,7 +204,9 @@ export default function DiarySection({
                       수정
                     </button>
                     <button
-                      onClick={() => removeDiary(d.id)}
+                      onClick={() => {
+                        if (confirm("이 일기를 삭제할까요?")) removeDiary(d.id);
+                      }}
                       className="hover:text-accent"
                     >
                       삭제

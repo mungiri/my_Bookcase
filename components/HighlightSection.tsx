@@ -185,7 +185,10 @@ export default function HighlightSection({
                           수정
                         </button>
                         <button
-                          onClick={() => removeHighlight(h.id)}
+                          onClick={() => {
+                            if (confirm("이 밑줄을 삭제할까요?"))
+                              removeHighlight(h.id);
+                          }}
                           className="hover:text-accent"
                         >
                           삭제
