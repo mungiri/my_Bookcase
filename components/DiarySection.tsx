@@ -16,6 +16,13 @@ function fmt(date: string) {
   return `${y}.${m}.${d}`;
 }
 
+/** 이 일기에서 읽은 페이지 수 (시작~끝 양쪽 포함) */
+function pagesRead(from?: number, to?: number): number | null {
+  if (from == null || to == null) return null;
+  const n = to - from + 1;
+  return n > 0 ? n : null;
+}
+
 interface FormValues {
   date: string;
   from: string;
@@ -137,7 +144,14 @@ export default function DiarySection({
 
       {adding && (
         <DiaryForm
-          initial={{ date: todayStr(), from: "", to: "", content: "" }}
+          initial={{
+            date: todayStr(),
+            // 직전(가장 최근) 일기의 마지막 페이지 다음 쪽부터
+            from:
+              sorted[0]?.pageTo != null ? String(sorted[0].pageTo + 1) : "",
+            to: "",
+            content: "",
+          }}
           submitLabel="저장"
           onCancel={() => setAdding(false)}
           onSubmit={(v) => {
@@ -191,6 +205,11 @@ export default function DiarySection({
                   {(d.pageFrom || d.pageTo) && (
                     <span className="text-xs text-muted">
                       {d.pageFrom ?? "?"}–{d.pageTo ?? "?"}쪽
+                    </span>
+                  )}
+                  {pagesRead(d.pageFrom, d.pageTo) != null && (
+                    <span className="text-xs text-accent bg-accent-soft rounded-full px-2 py-0.5">
+                      {pagesRead(d.pageFrom, d.pageTo)}쪽 읽음
                     </span>
                   )}
                   <div className="ml-auto flex items-center gap-2 text-xs text-muted">
